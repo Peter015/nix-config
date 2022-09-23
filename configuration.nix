@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+       <home-manager/nixos>
     ];
 
   # Bootloader.
@@ -43,6 +44,12 @@
     description = "Peter Zimmermann";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [];
+  };
+  
+  # home manager
+  home-manager.users.peterz = { pkgs, ... }: {
+    home.packages = [ ];
+    programs.fish.enable = true;
   };
 
   # Allow unfree packages
