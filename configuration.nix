@@ -8,14 +8,24 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-       <home-manager/nixos>
     ];
+  
+  # Kernel
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
-
+  
+  ### Daemons
+  ## Emacs daemon:
+  # services.emacs.enable = true;
+  
+  ## Darkman for light and darkmode
+  services.darkman.enable = true;
+  
+  
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -38,19 +48,17 @@
     xkbVariant = "";
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+ 
+ 
+ # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.peterz = {
     isNormalUser = true;
     description = "Peter Zimmermann";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [];
+    shell = pkgs.fish;
   };
   
-  # home manager
-  home-manager.users.peterz = { pkgs, ... }: {
-    home.packages = [ ];
-    programs.fish.enable = true;
-  };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -66,7 +74,6 @@
 	  wayfire
 	  chromium
 	  emacs
-	  fish
 	  kitty
     exa
     bat
@@ -74,6 +81,15 @@
     pavucontrol
     slurp
     grim
+    starship
+    fuzzel
+    fish
+    thunderbird
+    rlwrap
+    pcmanfm
+    joplin-desktop
+    ranger
+    darkman
     # programming
     git
     gh
@@ -83,9 +99,32 @@
     go
     rustup
     gcc
-    lispPackages.quicklisp
+    racket-minimal
+    rnix-lsp
+    ccls
+    nodePackages.pyright
+    nodePackages.bash-language-server
+    rust-analyzer
+    
+    # nodePackages = {
+      # pyright
+      # bash-language-server
+    # };
   ];
+
   
+  # Fonts
+  fonts.fonts = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    liberation_ttf
+    fira-code
+    fira-code-symbols
+    mplus-outline-fonts.githubRelease
+    dina-font
+    proggyfonts
+  ]; 
   
   services.greetd = {
     enable = true;
