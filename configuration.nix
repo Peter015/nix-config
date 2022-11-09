@@ -18,14 +18,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
   
-  ### Daemons
-  ## Emacs daemon:
-  # services.emacs.enable = true;
-  
-  ## Darkman for light and darkmode
-  services.darkman.enable = true;
-  
-  
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -64,6 +56,18 @@
   nixpkgs.config.allowUnfree = true;
 
   system.autoUpgrade.enable = true;
+  
+  programs.light.enable = true;
+  services.actkbd = {
+    enable = true;
+    bindings = [
+      { keys = [ 224 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -A 10"; }
+      { keys = [ 225 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -U 10"; }
+    ];
+  };
+  
+  services.tailscale.enable = true;
+  
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -89,12 +93,19 @@
     pcmanfm
     joplin-desktop
     ranger
-    darkman
+    waybar
+    exercism
+    blueberry
+    vlc
+    firefox
+    zathura
+    restream
+    discord
+    element-desktop
     # programming
     git
     gh
     drawio
-    python38
     sbcl
     go
     rustup
@@ -102,14 +113,18 @@
     racket-minimal
     rnix-lsp
     ccls
+    rust-analyzer
+    nodejs
     nodePackages.pyright
     nodePackages.bash-language-server
-    rust-analyzer
-    
-    # nodePackages = {
-      # pyright
-      # bash-language-server
-    # };
+    nodePackages.ts-node    
+    python310
+    python310Packages.pytest
+    spyder
+    lispPackages.quicklisp
+    omnisharp-roslyn
+    mono
+    dotnet-sdk
   ];
 
   
