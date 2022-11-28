@@ -10,38 +10,71 @@
       ./hardware-configuration.nix
     ];
   
-  # Kernel
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  hardware = {
+     pulseaudio = {
+      enable = true;
+      package = pkgs.pulseaudioFull;
+      daemon.config = {
+        default-sample-rate = 48000;
+        default-fragments = 8;
+        default-fragment-size-msec = 10;
+      };
+    };
+    bluetooth.enable = true;
+    logitech.wireless = {
+      enable = true;
+      enableGraphical = true;
+    };
+  };
 
+  sound.enable = true;
+    
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
+    loader = {
+      systemd-boot.enable = true;
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/boot/efi";
+      };
+    };
+  };
   
-  networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
-
+  # networking  
+  networking = {
+    hostName = "nixos";
+    networkmanager.enable = true;
+    firewall.checkReversePath = "loose";
+  };
+  
   # Set your time zone.
   time.timeZone = "America/New_York";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
+  
+  xdg.portal.wlr.enable = true;
 
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbVariant = "";
+  # services
+  services = { 
+    xserver = {
+      layout = "us";
+      xkbVariant = "";
+    };
+    greetd = {
+      enable = true;
+      settings = {
+        default_session = {
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd sway";
+          user = "greeter";
+        };
+      };
+    };
+    tailscale.enable = true;
+    flatpak.enable = true;
   };
-
- 
- 
+  
  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.peterz = {
     isNormalUser = true;
@@ -51,24 +84,24 @@
     shell = pkgs.fish;
   };
   
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   system.autoUpgrade.enable = true;
   
-  programs.light.enable = true;
-  services.actkbd = {
-    enable = true;
-    bindings = [
-      { keys = [ 224 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -A 10"; }
-      { keys = [ 225 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -U 10"; }
-    ];
+  programs = {
+    sway = {
+      enable = true;
+      extraPackages = with pkgs; [
+        swaylock
+        swayidle
+        foot  
+      ];
+    };
+    starship.enable = true;
+    light.enable = true;
   };
   
-  services.tailscale.enable = true;
-  
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -90,19 +123,27 @@
     fish
     thunderbird
     rlwrap
-    pcmanfm
-    joplin-desktop
     ranger
     waybar
     exercism
-    blueberry
     vlc
-    firefox
     zathura
     restream
     discord
-    element-desktop
+    xfce.thunar
+    lsof
+    mako
+    wlsunset
+    wlogout
+    kanshi
+    hikari
+    lavalauncher
+    xpad
+    ksh
     # programming
+    cargo-tauri
+    php
+    azure-cli
     git
     gh
     drawio
@@ -110,21 +151,28 @@
     go
     rustup
     gcc
-    racket-minimal
+    racket
     rnix-lsp
     ccls
+    clang
     rust-analyzer
-    nodejs
-    nodePackages.pyright
     nodePackages.bash-language-server
     nodePackages.ts-node    
+    nodePackages.typescript-language-server
+    nodePackages."@angular/cli"
+    nodePackages.vscode-html-languageserver-bin
     python310
     python310Packages.pytest
-    spyder
+    python310Packages.ipython
+    python310Packages.python-lsp-server
     lispPackages.quicklisp
+    lispPackages_new.sbclPackages.cl-project
     omnisharp-roslyn
     mono
     dotnet-sdk
+    node2nix
+    nodejs
+    scala
   ];
 
   
@@ -139,48 +187,10 @@
     mplus-outline-fonts.githubRelease
     dina-font
     proggyfonts
+    powerline-fonts
+    ibm-plex
   ]; 
   
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd sway";
-        user = "greeter";
-      };        
-    };
-  };  
-  
-  programs.sway = {
-    enable = true;
-    extraPackages = with pkgs; [
-      swaylock
-      swayidle
-      foot  
-    ];
-  };
-  
-  hardware = {
-     pulseaudio = {
-      enable = true;
-      package = pkgs.pulseaudioFull;
-      daemon.config = {
-        default-sample-rate = 48000;
-        default-fragments = 8;
-        default-fragment-size-msec = 10;
-      };
-    };
-    bluetooth = {
-      enable = true;
-    };
-  };
-
-  sound.enable = true;
-
-  programs.starship = {
-    enable = true;
-  };
-
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
