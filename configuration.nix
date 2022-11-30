@@ -95,7 +95,8 @@
       extraPackages = with pkgs; [
         swaylock
         swayidle
-        foot  
+        foot
+        swaybg  
       ];
     };
     starship.enable = true;
