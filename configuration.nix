@@ -124,7 +124,6 @@
     fish
     thunderbird
     rlwrap
-    ranger
     waybar
     exercism
     vlc
@@ -134,22 +133,19 @@
     xfce.thunar
     lsof
     mako
-    wlsunset
     wlogout
     kanshi
     hikari
-    lavalauncher
-    xpad
     ksh
+    spotify
+    xdg-utils
+    blueberry
     # programming
     cargo-tauri
-    php
     azure-cli
     git
     gh
-    drawio
     sbcl
-    go
     rustup
     gcc
     racket
@@ -162,18 +158,12 @@
     nodePackages.typescript-language-server
     nodePackages."@angular/cli"
     nodePackages.vscode-html-languageserver-bin
-    python310
-    python310Packages.pytest
     python310Packages.ipython
-    python310Packages.python-lsp-server
+    # python310Packages.python-lsp-server
     lispPackages.quicklisp
     lispPackages_new.sbclPackages.cl-project
-    omnisharp-roslyn
-    mono
-    dotnet-sdk
     node2nix
     nodejs
-    scala
   ];
 
   
