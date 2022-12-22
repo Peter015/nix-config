@@ -141,6 +141,7 @@
     xdg-utils
     blueberry
     # programming
+    php
     cargo-tauri
     azure-cli
     git
@@ -153,15 +154,14 @@
     ccls
     clang
     rust-analyzer
+    nodePackages_latest.typescript
     nodePackages.bash-language-server
-    nodePackages.ts-node    
+    nodePackages.ts-node
     nodePackages.typescript-language-server
     nodePackages."@angular/cli"
     nodePackages.vscode-html-languageserver-bin
     python310Packages.ipython
-    # python310Packages.python-lsp-server
-    lispPackages.quicklisp
-    lispPackages_new.sbclPackages.cl-project
+    python310Packages.python-lsp-server
     node2nix
     nodejs
   ];
